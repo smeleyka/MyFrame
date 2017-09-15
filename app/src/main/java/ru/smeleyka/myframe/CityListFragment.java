@@ -12,18 +12,18 @@ import android.widget.ListView;
  * Created by smeleyka on 15.09.17.
  */
 
-public class CityListFragment extends ListFragment{
+public class CityListFragment extends ListFragment {
 
-
+    private CityListListener mainActivity;
 
     public interface CityListListener {
         void itemClicked(long id);
     }
 
 
-
     @Override
     public void onAttach(Context context) {
+        mainActivity = (CityListListener) context;
         super.onAttach(context);
     }
 

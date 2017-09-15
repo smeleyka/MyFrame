@@ -15,6 +15,6 @@ public class MainActivity extends AppCompatActivity implements CityListFragment.
 
     @Override
     public void itemClicked(long id) {
-        
+
     }
 }
