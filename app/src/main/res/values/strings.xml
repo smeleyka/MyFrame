@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">My Frame</string>
+
+    <string-array name="city_list">Список городов>
+        <item>Москва</item>
+        <item>Санкт-Петербург</item>
+        <item>Новосибирск</item>
+        <item>Екатеринбург</item>
+        <item>Нижний Новгород</item>
+    </string-array>
+
+    <string-array name="city_img_list">Список городов>
+        <item>moscow</item>
+        <item>spb</item>
+        <item>novosibirsk</item>
+        <item>ekaterinburg</item>
+        <item>nizhniy_novgorod</item>
+    </string-array>
+
+    <string name="moscow">moscow</string>
+    <string name="spb">saintpetrsburg</string>
+    <string name="novosibirsk">novosibirsk</string>
+    <string name="ekaterinburg">ekaterinburg</string>
+    <string name="nizhniy_novgorod">nizhniy_novgorod</string>
+
+</resources>
