@@ -10,11 +10,14 @@ public class City {
     private String cityName;
     private String cityDescription;
     private int imageResourceId;
+    private boolean checked;
 
     private City(String cityName, String cityDescription, int imageResourceId) {
         this.cityName = cityName;
         this.cityDescription = cityDescription;
         this.imageResourceId = imageResourceId;
+        this.checked = false;
+
     }
 
 
@@ -34,12 +37,20 @@ public class City {
         return cityDescription;
     }
 
-    public int getImageResourceId() {
+        public int getImageResourceId() {
         return imageResourceId;
     }
 
     @Override
     public String toString() {
         return this.cityName;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }
