@@ -1,8 +1,10 @@
 package ru.smeleyka.myframe;
 
+import android.arch.persistence.room.Room;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -18,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
-    final static String WEATHER_API = "http://api.openweathermap.org/data/2.5/forecast?units=metric&lang=ru&q=%s&APPID=%s";
+    final static String WEATHER_API = "http://api.openweathermap.org/data/2.5/weather?units=metric&lang=ru&q=%s&APPID=%s";
     final static String DAY = "weather";
     final static String FORECAST = "forecast";
     final static String FIND = "find";
@@ -27,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
     final static String KEY = "x-api-key";
     ListView listView;
     TextView textView;
+    EditText getCityName;
+    GsonCity city;
+    AppDatabase db;
 
 
     public MainActivity() {
@@ -41,10 +46,24 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_layout);
         textView = (TextView) findViewById(R.id.text_view);
         listView = (ListView) findViewById(R.id.lvMain);
+        getCityName = (EditText)findViewById(R.id.get_city_name);
+
 
         ArrayList cityList = new ArrayList(Arrays.asList(City.cities));
         CityListAdapter<City> cityListAdapter = new CityListAdapter<>(this, cityList);
         listView.setAdapter(cityListAdapter);
+
+//        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+//                AppDatabase.class, "database-name").build();
+
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
 
 
     }
@@ -52,8 +71,11 @@ public class MainActivity extends AppCompatActivity {
     public void getJson(View view) {
         new Thread() {
             public void run() {
+                db = Room.databaseBuilder(getApplicationContext(),
+                        AppDatabase.class, "database.db").build();
+
                 try {
-                    URL url = new URL(String.format(WEATHER_API,CITY,APPID));
+                    URL url = new URL(String.format(WEATHER_API,getCityName.getText(),APPID));
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                     //connection.addRequestProperty(KEY, "2a7f0c1303d85d0e6c4d50280db14801");
                     BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -79,9 +101,34 @@ public class MainActivity extends AppCompatActivity {
 
     public void parseJson(String rawData){
         Gson gson = new Gson();
-        GsonCity city = gson.fromJson(rawData,GsonCity.class);
+        city = gson.fromJson(rawData,GsonCity.class);
         System.out.println(city.getId()+ " "+city.getName());
         System.out.println(city.getMain().getTemp()+ " "+city.getMain().getPressure());
+        System.out.println(db.isOpen());
+
+        if (city !=null) {
+            if(db.getCityDao().findById(city.getId()) == null)
+            db.getCityDao().insertAll(city);
+        }
+
     }
 
+
+    public void readDb(View view) {
+
+        new Thread() {
+
+            public void run() {
+                textView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        GsonCity town = db.getCityDao().findById(city.getId());
+                    }
+
+
+                });
+            }
+        }.start();
+
+    }
 }
