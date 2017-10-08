@@ -119,10 +119,15 @@ public class MainActivity extends AppCompatActivity {
         new Thread() {
 
             public void run() {
+
+               final GsonCity town = db.getCityDao().findById(city.getId());
+
+
+
                 textView.post(new Runnable() {
                     @Override
                     public void run() {
-                        GsonCity town = db.getCityDao().findById(city.getId());
+                        textView.setText(town.toString());
                     }
 
 
